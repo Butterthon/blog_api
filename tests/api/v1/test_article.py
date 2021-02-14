@@ -5,7 +5,7 @@ from fastapi import status
 from pydantic import parse_obj_as
 
 from crud.crud_article import CRUDArticle
-from tests import BaseTestCase
+from tests.base import BaseTestCase
 
 
 class TestArticleAPI(BaseTestCase):

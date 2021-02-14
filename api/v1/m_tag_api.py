@@ -4,12 +4,13 @@ from typing import List
 
 from fastapi import Request
 
+from api.mixins import ApiMixin
 from api.schemas.request.m_tag_schema import CreateMTagSchema
 from crud.crud_m_tag import CRUDMTag
 from migrations.models.m_tag import MTag
 
 
-class MTagAPI:
+class MTagAPI(ApiMixin):
     """ タグデータに関するAPI
     """
     @classmethod

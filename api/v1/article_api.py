@@ -4,12 +4,13 @@ from typing import List
 
 from fastapi import Request
 
+from api.mixins import ApiMixin
 from api.schemas.request.article_schema import CreateArticleSchema
 from crud.crud_article import CRUDArticle
 from migrations.models.article import Article
 
 
-class ArticleAPI:
+class ArticleAPI(ApiMixin):
     """ 記事データに関するAPI
     """
     @classmethod
