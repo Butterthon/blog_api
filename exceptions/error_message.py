@@ -16,3 +16,6 @@ class ErrorMessage:
     """
     class INTERNAL_SERVER_ERROR(BaseMessage):
         message = 'システムエラーが発生しました、管理者に問い合わせてください'
+    
+    class INVALID_TOKEN(BaseMessage):
+        message = '不正なトークンです'

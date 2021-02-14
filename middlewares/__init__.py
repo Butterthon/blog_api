@@ -9,7 +9,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from core.environment import get_env
 from crud.base import get_db_session
-from excetions import ApiException, SystemException
+from exceptions import ApiException, SystemException
 from tests.db_session import get_test_db_session
 
 
