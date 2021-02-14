@@ -1,3 +1,5 @@
+# /usr/bin/env python
+# -*- coding: utf-8 -*-
 from fastapi.testclient import TestClient
 
 from crud.base import generate_db_session
