@@ -18,6 +18,11 @@ class Environment(BaseSettings):
     DEBUG: bool
     DATABASE_URL: str
     TEST_DATABASE_URL: str
+    JWT_ALGORITHM: str
+    JWT_SECRET_KEY: str
+    JWT_ACCESS_TOKEN_EXPIRE: int
+    JWT_REFRESH_TOKEN_EXPIRE: int
+    JWT_ONE_TIME_TOKEN_EXPIRE: int
 
     class Config:
         env_file = os.path.join(PROJECT_ROOT_DIR, '.env')
