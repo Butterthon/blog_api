@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import (
     Column,
+    INTEGER,
     TEXT,
     text,
 )
@@ -31,3 +32,9 @@ class Article(BaseModel):
         TEXT,
         nullable=False,
         comment='記事本文')
+
+    version = Column(
+        INTEGER,
+        nullable=False,
+        default=1,
+        comment='バージョン（楽観排他制御用）')

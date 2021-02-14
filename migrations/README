@@ -1,1 +1,6 @@
 Generic single-database configuration.
+
+``` shell
+docker-compose exec app alembic revision --autogenerate
+docker-compose exec app alembic upgrade head
+```

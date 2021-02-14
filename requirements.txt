@@ -1,9 +1,12 @@
 alembic==1.4.2
 email-validator==1.1.2
 fastapi==0.63.0
+freezegun==1.1.0
 psycopg2==2.8.6
 pydantic[email]==1.7.3
 python-dotenv==0.14.0
+pytest==6.1.0
+requests==2.25.1
 sqla-softdelete==1.2
 SQLAlchemy==1.3.18
 SQLAlchemy-Utils==0.36.8
