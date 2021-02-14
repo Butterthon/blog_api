@@ -5,12 +5,21 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse, Response
+from fastapi.security.utils import get_authorization_scheme_param
+from jose import jwt
+from starlette.middleware import authentication
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from core.environment import get_env
 from crud.base import get_db_session
 from exceptions import ApiException, SystemException
+from exceptions.error_message import ErrorMessage
 from tests.db_session import get_test_db_session
+from utilities.jwt_handler import (
+    jwt_decord_handler,
+    TYPE_ACCESS_TOKEN,
+    TYPE_REFRESH_TOKEN
+)
 
 
 class ProcessRequestMiddleware(BaseHTTPMiddleware):
@@ -62,3 +71,47 @@ class ProcessRequestMiddleware(BaseHTTPMiddleware):
         finally:
             # DBセッション破棄
             request.state.db_session.remove()
+
+
+class AuthenticationBackend(authentication.AuthenticationBackend):
+    """ 認証ミドルウェアのバックエンド
+    """
+    async def authenticate(self, request: Request):
+        """ 認証処理
+
+        Args:
+            request (Request): リクエスト情報
+        """
+        request.state.user_id = None
+
+        # リクエストにDBセッション追加(例外発生時のエラー対策)
+        request.state.db_session = get_db_session() if not getattr(get_env(), 'is_test', False) else get_test_db_session()
+
+        authorization: str = request.headers.get('Authorization')
+        scheme, access_token = get_authorization_scheme_param(authorization)
+
+        # リクエストヘッダに認証情報が無い場合は何もしない
+        if not authorization or scheme.lower() != 'bearer':
+            return
+
+        # JWTをデコードしてクレームセットを取得
+        try:
+            claims = jwt_decord_handler(access_token)
+
+        # トークンタイプ不一致など
+        except ApiException as ae:
+            raise ae
+
+        # アクセストークン期限切れ
+        except jwt.ExpiredSignatureError:
+            raise ApiException(
+                create_error(ErrorMessage.EXPIRED_TOKEN),
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
+
+        # その他エラーの場合は何もしない
+        except Exception as e:
+            return
+
+        # クレームセットのユーザーIDをリクエスト情報にセット
+        request.state.user_id = claims['user_id']

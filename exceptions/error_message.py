@@ -19,3 +19,6 @@ class ErrorMessage:
     
     class INVALID_TOKEN(BaseMessage):
         message = '不正なトークンです'
+    
+    class EXPIRED_TOKEN(INVALID_TOKEN):
+        pass
